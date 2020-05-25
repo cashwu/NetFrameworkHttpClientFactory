@@ -1,30 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace testMvcHttpClient.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        private readonly IHttpClientFactory _httpClientFactory;
+
+        public HomeController(IHttpClientFactory httpClientFactory)
         {
-            return View();
+            _httpClientFactory = httpClientFactory;
         }
 
-        public ActionResult About()
+        public async Task<ActionResult> Index()
         {
-            ViewBag.Message = "Your application description page.";
+            using (var httpClient = _httpClientFactory.CreateClient())
+            {
+                var result = await httpClient.GetStringAsync(new Uri("https://www.google.com"));
 
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }
