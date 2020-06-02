@@ -18,7 +18,7 @@ namespace testMvcHttpClient.Controllers
         {
             using (var httpClient = _httpClientFactory.CreateClient())
             {
-                var result = await httpClient.GetStringAsync(new Uri("https://www.google.com"));
+                var result = await httpClient.GetStringAsync(new Uri("https://blog.cashwu.com"));
 
                 return Json(result, JsonRequestBehavior.AllowGet);
             }

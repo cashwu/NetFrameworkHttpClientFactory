@@ -23,19 +23,20 @@ namespace testMvcHttpClient
         private static void AutofacContainer()
         {
             var builder = new ContainerBuilder();
-            
+
             var assembly = Assembly.GetExecutingAssembly();
 
             builder.RegisterControllers(assembly);
-            
+
             builder.Register(c =>
             {
-                var hostBuilder = new HostBuilder();
-                hostBuilder.ConfigureServices(s => s.AddHttpClient());
+                var serviceCollection = new ServiceCollection();
 
-                return hostBuilder.Build().Services.GetService<IHttpClientFactory>();
+                serviceCollection.AddHttpClient();
+
+                return serviceCollection.BuildServiceProvider().GetRequiredService<IHttpClientFactory>();
             }).SingleInstance();
-            
+
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
         }
